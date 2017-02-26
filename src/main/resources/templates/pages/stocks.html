@@ -11,7 +11,18 @@
 
     <style>
         .stock {
-            text-align: center;
+            padding: 20px !important;
+            margin: 15px 15px 0 !important;
+            background-color: gainsboro;
+            border: 1px solid darkred;
+        }
+
+        .positive {
+            color: green;
+        }
+
+        .negative {
+            color: red;
         }
     </style>
 </head>
@@ -56,7 +67,9 @@
                 + data.symbol
                 + '<br/>'
                 + data.price
-                + '</div>';
+                + ' <span class="inj">'.replace('inj', data.positive ? 'positive' : 'negative')
+                + data.change
+                + '</span></div>';
             received++;
             if (received === size) {
                 source.close();

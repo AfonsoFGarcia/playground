@@ -29,6 +29,7 @@ public class StockServiceImpl implements StockService {
         Stock stock = YahooFinance.get(symbol);
         return new StockDto(symbol,
                 stock.getName(),
-                stock.getQuote().getPrice().doubleValue());
+                stock.getQuote().getPrice(),
+                stock.getQuote().getChangeInPercent());
     }
 }
