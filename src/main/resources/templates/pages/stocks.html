@@ -44,7 +44,7 @@
     function _refreshStock(stocks) {
         document.getElementById('result').innerHTML = '';
 
-        var source = new EventSource('/stocks/stream/' + stocks);
+        var source = new EventSource('/stocks/stream/' + stocks + "/");
         var size = stocks.split(',').length;
         var received = 0;
 
@@ -69,7 +69,7 @@
     }
 
     $(function () {
-        _refreshStock('AAPL,GOOGL,GOOG,MSFT,AMZN,FB,CMCSA,INTC,CSCO,AMGN,KHC,WBA,CELG,GILD,CHTR,QCOM,AVGO,SBUX,PCLN,TXN');
+        _refreshStock('NOS.LS,CTT.LS,EGL.LS,EDP.LS,SEM.LS,GALP.LS,EDPR.LS,RENE.LS,BPI.LS,SON.LS,ALTR.LS,COR.LS,JMT.LS,BCP.LS,SONC.LS,PHR.LS,MPIO.LS');
     });
 
 </script>

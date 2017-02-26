@@ -39,7 +39,6 @@ public class StockController {
         Observable<StockDto> stockObservable = stockService.getStockPrices(symbolList);
 
         stockObservable
-                .subscribeOn(Schedulers.computation())
                 .subscribe(stockPrices::add,
                         err -> responseEntity[0] = ResponseEntity.status(500).body(err.getMessage()),
                         () -> responseEntity[0] = ResponseEntity.ok(stockPrices));
