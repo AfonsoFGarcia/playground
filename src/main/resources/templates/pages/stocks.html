@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous" />
+
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <title>Stocks Page</title>
+
+    <style>
+        .stock {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">The Awesome Stock Company</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <div class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Symbols" id="symbols" />
+            <button class="btn btn-outline-success my-2 my-sm-0" onclick="refreshStock()">Get Stocks!</button>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div id="result" class="d-flex flex-row justify-content-around align-items-center flex-wrap align-content-between"></div>
+</div>
+</body>
+</html>
+
+<script>
+    function _refreshStock(stocks) {
+        document.getElementById('result').innerHTML = '';
+
+        var source = new EventSource('/stocks/stream/' + stocks);
+        var size = stocks.split(',').length;
+        var received = 0;
+
+        source.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            document.getElementById('result').innerHTML += '<div class="ml-auto mt-auto mr-auto mb-auto p-1 stock"><h1>'
+                + data.company
+                + '</h1>'
+                + data.symbol
+                + '<br/>'
+                + data.price
+                + '</div>';
+            received++;
+            if (received === size) {
+                source.close();
+            }
+        }
+    }
+
+    function refreshStock() {
+        _refreshStock($('#symbols').val());
+    }
+
+    $(function () {
+        _refreshStock('AAPL,GOOGL,GOOG,MSFT,AMZN,FB,CMCSA,INTC,CSCO,AMGN,KHC,WBA,CELG,GILD,CHTR,QCOM,AVGO,SBUX,PCLN,TXN');
+    });
+
+</script>
