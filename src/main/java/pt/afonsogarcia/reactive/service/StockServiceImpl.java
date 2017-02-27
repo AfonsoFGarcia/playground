@@ -31,6 +31,7 @@ public class StockServiceImpl implements StockService {
 
     private StockDto getStockPrice(String symbol) throws Exception {
         Stock stock = YahooFinance.get(symbol);
+        Thread.sleep(Long.valueOf(Double.toString(Math.floor(Math.random()*2000)).split("\\.")[0]));
         return new StockDto(symbol,
                             stock.getName(),
                             stock.getQuote().getPrice(),

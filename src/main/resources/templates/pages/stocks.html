@@ -67,32 +67,33 @@
 </html>
 
 <script>
+    function updatePage(event) {
+        var data = JSON.parse(event.data);
+        document.getElementById('result').innerHTML += '<div class="ml-auto mt-auto mr-auto mb-auto stock">'
+            + '<h1 class="stock-title">'
+            + data.company
+            + '</h1>'
+            + data.symbol
+            + '<br/>'
+            + data.price
+            + ' '
+            + data.currency
+            + ' <span class="inj">'.replace('inj', data.positive ? 'positive' : 'negative')
+            + data.change
+            + '%</span></div>';
+    }
+
+
+
     function _refreshStock(stocks) {
         document.getElementById('result').innerHTML = '';
 
         var source = new EventSource('/stocks/stream/' + stocks + "/");
-        var size = stocks.split(',').length;
-        var received = 0;
 
-        source.onmessage = function (event) {
-            var data = JSON.parse(event.data);
-            document.getElementById('result').innerHTML += '<div class="ml-auto mt-auto mr-auto mb-auto stock">'
-                + '<h1 class="stock-title">'
-                + data.company
-                + '</h1>'
-                + data.symbol
-                + '<br/>'
-                + data.price
-                + ' '
-                + data.currency
-                + ' <span class="inj">'.replace('inj', data.positive ? 'positive' : 'negative')
-                + data.change
-                + '%</span></div>';
-            received++;
-            if (received === size) {
-                source.close();
-            }
-        }
+        source.addEventListener('stock-info', updatePage, false);
+        source.addEventListener('done', function () {
+            source.close();
+        }, false);
     }
 
     function refreshStock() {
