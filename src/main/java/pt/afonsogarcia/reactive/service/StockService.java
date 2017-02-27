@@ -5,6 +5,7 @@ import pt.afonsogarcia.reactive.dto.StockDto;
 
 import java.util.List;
 
+
 public interface StockService {
 
     Observable<StockDto> getStockPrices(List<String> symbols);

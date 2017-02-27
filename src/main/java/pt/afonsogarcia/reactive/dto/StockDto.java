@@ -2,6 +2,7 @@ package pt.afonsogarcia.reactive.dto;
 
 import java.math.BigDecimal;
 
+
 public class StockDto {
 
     private String symbol;
@@ -10,14 +11,17 @@ public class StockDto {
 
     private BigDecimal price;
 
+    private String currency;
+
     private BigDecimal change;
 
     private Boolean positive;
 
-    public StockDto(String symbol, String company, BigDecimal price, BigDecimal change) {
+    public StockDto(String symbol, String company, BigDecimal price, String currency, BigDecimal change) {
         this.symbol = symbol;
         this.company = company;
         this.price = price;
+        this.currency = currency;
         this.change = change;
         this.positive = change.compareTo(BigDecimal.ZERO) >= 0;
     }
@@ -44,6 +48,14 @@ public class StockDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public BigDecimal getChange() {

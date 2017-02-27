@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/stocks")
 public class StockController {
@@ -40,8 +41,8 @@ public class StockController {
 
         stockObservable
                 .subscribe(stockPrices::add,
-                        err -> responseEntity[0] = ResponseEntity.status(500).body(err.getMessage()),
-                        () -> responseEntity[0] = ResponseEntity.ok(stockPrices));
+                           err -> responseEntity[0] = ResponseEntity.status(500).body(err.getMessage()),
+                           () -> responseEntity[0] = ResponseEntity.ok(stockPrices));
 
         return responseEntity[0];
     }
@@ -51,10 +52,10 @@ public class StockController {
         SseEmitter emitter = new SseEmitter();
 
         stockService.getStockPrices(Arrays.asList(symbols.split(",")))
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .subscribe(emitter::send,
-                        emitter::completeWithError,
-                        emitter::complete);
+                           emitter::completeWithError,
+                           emitter::complete);
 
         return emitter;
     }
