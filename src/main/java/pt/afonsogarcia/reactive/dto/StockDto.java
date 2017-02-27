@@ -1,5 +1,7 @@
 package pt.afonsogarcia.reactive.dto;
 
+import pt.afonsogarcia.reactive.domain.StockDatabase;
+
 import java.math.BigDecimal;
 
 
@@ -16,6 +18,15 @@ public class StockDto {
     private BigDecimal change;
 
     private Boolean positive;
+
+    public StockDto(StockDatabase stockDatabase) {
+        this.symbol = stockDatabase.getSymbol();
+        this.company = stockDatabase.getCompany();
+        this.price = stockDatabase.getPrice();
+        this.currency = stockDatabase.getCurrency();
+        this.change = stockDatabase.getChange();
+        this.positive = change.compareTo(BigDecimal.ZERO) >= 0;
+    }
 
     public StockDto(String symbol, String company, BigDecimal price, String currency, BigDecimal change) {
         this.symbol = symbol;
@@ -68,5 +79,15 @@ public class StockDto {
 
     public Boolean getPositive() {
         return positive;
+    }
+
+    public StockDatabase toStockDatabase() {
+        StockDatabase stockDatabase = new StockDatabase();
+        stockDatabase.setSymbol(symbol);
+        stockDatabase.setCompany(company);
+        stockDatabase.setPrice(price);
+        stockDatabase.setCurrency(currency);
+        stockDatabase.setChange(change);
+        return stockDatabase;
     }
 }

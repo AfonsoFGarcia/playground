@@ -83,6 +83,10 @@
         .result {
             border: 1px solid darkred;
         }
+
+        .italic {
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -119,14 +123,49 @@
 </html>
 
 <script>
+    var stocks = [];
+
+    function pushStocks(stockSymbols) {
+        var stockArray = stockSymbols.split(',');
+
+        stockArray.forEach(function (stockSymbol) {
+            pushStock(stockSymbol);
+        });
+    }
+
+    function pushStock(stockSymbol) {
+        if(stockSymbol.charAt(0) !== '-') {
+            var index = stocks.indexOf(stockSymbol);
+            if(index === -1) {
+                stocks.push(stockSymbol);
+            }
+        } else {
+            var trueStockSymbol = stockSymbol.substring(1);
+            var index = stocks.indexOf(trueStockSymbol);
+            if(index > -1) {
+                stocks.splice(index, 1);
+            }
+        }
+    }
+
+    function stocksToString() {
+        var stockString = '';
+
+        stocks.forEach(function (stockSymbol) {
+            stockString += stockSymbol + ',';
+        });
+
+        return stockString.slice(0, -1);
+    }
+
     function updatePage(event) {
         var data = JSON.parse(event.data);
         document.getElementById('result').innerHTML += '<div class="ml-auto mt-auto mr-auto mb-auto stock">'
             + '<h1 class="stock-title">'
             + data.company
-            + '</h1>'
+            + '</h1><span class="italic">'
             + data.symbol
-            + '<br/>'
+            + '</span><br/>'
             + data.price
             + ' '
             + data.currency
@@ -135,10 +174,10 @@
             + '%</span></div>';
     }
 
-    function _refreshStock(stocks) {
+    function _refreshStock() {
         document.getElementById('result').innerHTML = '';
 
-        var source = new EventSource('/stocks/stream/' + stocks + "/");
+        var source = new EventSource('/stocks/stream/' + stocksToString() + "/");
 
         source.addEventListener('stock-info', updatePage, false);
         source.addEventListener('done', function () {
@@ -154,12 +193,14 @@
 
     function refreshStock() {
         $('#loader').show();
-        _refreshStock($('#symbols').val());
+        pushStocks($('#symbols').val());
+        _refreshStock();
     }
 
     $(function () {
         $('#loader').show();
-        _refreshStock('NOS.LS,CTT.LS,EGL.LS,EDP.LS,SEM.LS,GALP.LS,EDPR.LS,RENE.LS,BPI.LS,SON.LS,ALTR.LS,COR.LS,JMT.LS,BCP.LS,SONC.LS,PHR.LS,MPIO.LS');
+        pushStocks('NOS.LS,CTT.LS,EGL.LS,EDP.LS,SEM.LS,GALP.LS,EDPR.LS,RENE.LS,BPI.LS,SON.LS,ALTR.LS,COR.LS,JMT.LS,BCP.LS,SONC.LS,PHR.LS,MPIO.LS');
+        _refreshStock();
     });
 
 </script>
