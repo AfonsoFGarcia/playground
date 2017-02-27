@@ -65,7 +65,7 @@ public class StockController {
     }
 
     private void error(Throwable throwable) throws IOException {
-        send("error", throwable.getMessage());
+        send("error", throwable.toString());
         emitter.completeWithError(throwable);
     }
 
