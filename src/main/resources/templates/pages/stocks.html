@@ -94,6 +94,10 @@
         source.addEventListener('done', function () {
             source.close();
         }, false);
+        source.addEventListener('error', function (event) {
+            console.log(event);
+            source.close();
+        }, false);
     }
 
     function refreshStock() {

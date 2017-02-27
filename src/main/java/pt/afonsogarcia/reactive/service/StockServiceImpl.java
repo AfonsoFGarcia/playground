@@ -17,7 +17,6 @@ public class StockServiceImpl implements StockService {
         return Observable.create(e -> {
             symbols
                     .parallelStream()
-                    //.stream()
                     .forEach(symbol -> {
                 try {
                     e.onNext(getStockPrice(symbol));
